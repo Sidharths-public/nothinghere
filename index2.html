@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical Midnight Log | 11.10.25 ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@300;400;500&family=Playfair+Display:ital,wght@0,600;1,600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --midnight-blue: #0f172a;
+            --deep-purple: #1e1b4b;
+            --neon-pink: #ff2d55;
+            --electric-gold: #ffd700;
+            --glass-white: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--midnight-blue), var(--deep-purple));
+            color: #f8fafc;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .font-cursive { font-family: 'Dancing Script', cursive; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+
+        /* Starry Background (Canvas) */
+        #star-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(90deg, white, transparent);
+            animation: shoot 3s infinite;
+            opacity: 0;
+        }
+
+        @keyframes shoot {
+            0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 0; }
+            10% { opacity: 1; }
+            20% { transform: translateX(300px) translateY(300px) rotate(-45deg); opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: var(--glass-white);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(255, 45, 85, 0.1);
+            border-color: rgba(255, 45, 85, 0.3);
+        }
+
+        /* Neon Glows */
+        .neon-text-pink {
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px rgba(255, 45, 85, 0.5), 0 0 20px rgba(255, 45, 85, 0.3);
+        }
+
+        .neon-text-gold {
+            color: var(--electric-gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Timeline Glowing Line */
+        .timeline-container {
+            position: relative;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--neon-pink), var(--electric-gold), transparent);
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px var(--neon-pink);
+            z-index: 0;
+        }
+
+        /* Crystal Polaroid */
+        .crystal-frame {
+            position: relative;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            display: inline-block;
+            width: 100%;
+        }
+
+        .crystal-frame::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: 0.5s;
+        }
+
+        .crystal-frame:hover {
+            transform: scale(1.05) rotate(1deg);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 45, 85, 0.2);
+            border-color: var(--neon-pink);
+        }
+
+        .crystal-frame:hover::before {
+            left: 100%;
+        }
+
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mouse Trail */
+        .cursor-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 45, 85, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: screen;
+        }
+
+        /* Unlock Constellation Theme */
+        #password-screen {
+            background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+        }
+
+        .constellation-node {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px white;
+        }
+    </style>
+</head>
+<body class="selection:bg-pink-500/30">
+
+    <canvas id="star-canvas"></canvas>
+    <div class="cursor-glow" id="cursor-glow"></div>
+
+    <!-- Privacy Layer (Celestial Unlock) -->
+    <div id="password-screen" class="fixed inset-0 z-[200] flex items-center justify-center p-6">
+        <div id="constellation-bg" class="absolute inset-0 pointer-events-none opacity-40"></div>
+        <div class="max-w-md w-full text-center relative z-10 glass-card p-12">
+            <div class="mb-8">
+                <i data-lucide="stars" class="w-12 h-12 text-pink-400 mx-auto animate-pulse"></i>
+            </div>
+            <h2 class="font-serif italic text-3xl text-white mb-6">Celestial Access</h2>
+            <p class="text-gray-400 text-[10px] tracking-[0.3em] uppercase mb-8">Align our special date (DDMM)</p>
+            <input type="password" id="pass-input" maxlength="4" class="w-full bg-transparent border-b-2 border-pink-500/30 py-3 text-center text-4xl tracking-[1em] focus:outline-none focus:border-pink-500 transition-all text-pink-400 font-bold" placeholder="••••">
+            <div id="error-msg" class="text-pink-300 text-[10px] mt-4 opacity-0 transition-opacity">The stars are not aligned. Try again ❤️</div>
+            <button onclick="checkPass()" class="mt-12 px-12 py-4 bg-pink-500/10 border border-pink-500/30 text-pink-400 rounded-full text-[10px] tracking-widest uppercase hover:bg-pink-500/20 transition-all hover:scale-105 active:scale-95">Unlock Universe</button>
+        </div>
+    </div>
+
+    <!-- Cover Section -->
+    <div id="cover" class="fixed inset-0 z-[100] bg-slate-950 flex flex-col items-center justify-center transition-all duration-1000">
+        <div class="relative group cursor-pointer" onclick="unfoldStory()">
+            <div class="absolute -inset-4 bg-pink-500/20 rounded-full blur-2xl group-hover:bg-pink-500/40 transition-all"></div>
+            <div class="relative text-center px-8">
+                <div class="mb-8 relative inline-block">
+                    <i data-lucide="moon" class="w-20 h-20 text-white fill-white/10 mx-auto transition-transform group-hover:scale-110"></i>
+                    <i data-lucide="sparkles" class="w-8 h-8 text-gold-400 absolute -top-2 -right-2 animate-bounce"></i>
+                </div>
+                <h1 class="font-serif italic text-4xl md:text-6xl text-white mb-4">Midnight Memories</h1>
+                <p class="text-pink-400/60 font-light tracking-[0.5em] text-[10px] md:text-xs uppercase">Tap to ignite the stars</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="story-root" class="hidden opacity-0 transition-all duration-1000 relative">
+        
+        <!-- Hero Section -->
+        <section class="min-h-screen flex flex-col items-center justify-center px-6 text-center relative overflow-hidden">
+            <div class="reveal max-w-4xl z-10">
+                <span class="text-pink-500 uppercase tracking-[0.8em] text-[10px] mb-12 block">A Journey Through Time & Stars</span>
+                <h2 class="font-cursive text-5xl md:text-8xl neon-text-pink mb-12">Midnight with You.</h2>
+                <div class="glass-card p-12 md:p-16">
+                    <p class="text-xl md:text-3xl font-light leading-relaxed text-slate-300 italic font-serif">
+                        "From the first spark at Teranis to our late-night talks under the moon. 
+                        Every moment has been a constellation in my life, shining brighter than anything else."
+                    </p>
+                </div>
+                <div class="mt-20 opacity-40">
+                    <i data-lucide="chevrons-down" class="w-10 h-10 mx-auto animate-bounce text-pink-400"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Cosmic Timeline -->
+        <div class="relative pb-32">
+            <div class="timeline-line hidden md:block"></div>
+
+            <!-- Chapter 1: The Spark -->
+            <section class="py-24 md:py-48 px-6">
+                <div class="max-w-4xl mx-auto text-center reveal">
+                    <div class="inline-block px-4 py-1 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 text-[10px] tracking-widest uppercase mb-6">Entry 01</div>
+                    <h3 class="font-serif text-5xl md:text-7xl mb-8 neon-text-gold">Innovation Corner</h3>
+                    <p class="text-slate-400 font-light leading-relaxed text-2xl italic max-w-2xl mx-auto">
+                        Teranis 2025. Amidst the innovations and crowds, my eyes found a spark. You were there, and for me, the world suddenly had a new center of gravity.
+                    </p>
+                </div>
+            </section>
+
+            <!-- NEW: The FOSS Bond -->
+            <section class="py-24 md:py-48 px-6 bg-slate-900/20">
+                <div class="max-w-4xl mx-auto text-center reveal">
+                    <div class="inline-block px-4 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] tracking-widest uppercase mb-6">The Connection</div>
+                    <h3 class="font-serif text-5xl md:text-7xl mb-8 neon-text-pink">The FOSS Bond</h3>
+                    <p class="text-slate-400 font-light leading-relaxed text-2xl italic max-w-2xl mx-auto">
+                        We were in the same FOSS Club, meeting during those long sessions and volunteer works for Teranis. That soft corner and spark stayed with me through every meeting.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Chapter 2: Bangalore -->
+            <section class="py-24 md:py-48 px-6 relative">
+                <div class="max-w-7xl mx-auto text-center reveal">
+                    <div class="inline-block px-4 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] tracking-widest uppercase mb-12">The Shift</div>
+                    <h3 class="font-serif text-5xl md:text-6xl mb-12 text-white">The Bangalore Journey</h3>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-16">
+                        <div class="crystal-frame -rotate-2">
+                            <img src="banglore trip/WhatsApp Image 2026-04-13 at 11.00.20 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Bangalore 1">
+                        </div>
+                        <div class="crystal-frame rotate-1 mt-8 md:mt-0">
+                            <img src="banglore trip/WhatsApp Image 2026-04-13 at 11.00.25 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Bangalore 2">
+                        </div>
+                        <div class="crystal-frame -rotate-1">
+                            <img src="banglore trip/WhatsApp Image 2026-04-13 at 11.00.42 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Bangalore 3">
+                        </div>
+                        <div class="crystal-frame rotate-2 mt-8 md:mt-0">
+                            <img src="banglore trip/WhatsApp Image 2026-04-13 at 11.00.43 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Bangalore 4">
+                        </div>
+                        <div class="crystal-frame -rotate-3">
+                            <img src="banglore trip/WhatsApp Image 2026-04-13 at 11.00.43 AM (1).jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Bangalore 5">
+                        </div>
+                        <div class="crystal-frame rotate-1 mt-8 md:mt-0">
+                            <img src="banglore trip/WhatsApp Image 2026-04-13 at 11.00.43 AM (2).jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Bangalore 6">
+                        </div>
+                        <div class="crystal-frame -rotate-1">
+                            <img src="banglore trip/WhatsApp Image 2026-04-13 at 11.24.10 AM (1).jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Bangalore 7">
+                        </div>
+                    </div>
+
+                    <p class="text-slate-300 font-light text-2xl leading-relaxed italic px-8 max-w-4xl mx-auto">
+                        "10 people, one meetup, but my eyes were only tracking you. Those night walks and secret signals... it was the beginning of our own little universe."
+                    </p>
+                </div>
+            </section>
+
+            <!-- NEW: The Special Return -->
+            <section class="py-24 md:py-48 px-6 bg-slate-900 overflow-hidden relative">
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center relative z-10">
+                    <div class="reveal order-2 md:order-1 flex gap-4 justify-center">
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <div class="crystal-frame rotate-1">
+                                <img src="banglore return/WhatsApp Image 2026-04-13 at 10.49.03 AM (1).jpeg" class="w-full h-auto object-cover" alt="Return Train">
+                            </div>
+                            <div class="crystal-frame -rotate-2 mt-12">
+                                <img src="banglore return/WhatsApp Image 2026-04-13 at 10.49.04 AM.jpeg" class="w-full h-auto object-cover" alt="Return Train 2">
+                            </div>
+                            <div class="crystal-frame rotate-3">
+                                <img src="banglore return/WhatsApp Image 2026-04-13 at 10.49.04 AM (1).jpeg" class="w-full h-auto object-cover" alt="Return Train 3">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reveal order-1 md:order-2">
+                        <div class="inline-block px-4 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] tracking-widest uppercase mb-6">A Special Place</div>
+                        <h3 class="font-serif text-4xl md:text-5xl mb-8 neon-text-gold">Return Train Moments</h3>
+                        <p class="text-slate-300 font-light text-xl leading-relaxed italic">
+                            The return train journey... it was purely magical. Something shifted inside us during that ride home. It was the moment I knew this was more than just a crush.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NEW: The Confession -->
+            <section class="py-24 md:py-48 px-6 bg-pink-500/5">
+                <div class="max-w-4xl mx-auto text-center reveal">
+                    <div class="mb-12">
+                        <i data-lucide="heart-handshake" class="w-16 h-16 text-pink-500 mx-auto animate-pulse"></i>
+                    </div>
+                    <div class="inline-block px-4 py-1 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 text-[10px] tracking-widest uppercase mb-8">The Reveal</div>
+                    <h3 class="font-serif text-5xl md:text-7xl mb-12 neon-text-pink">The Confession</h3>
+                    <p class="text-slate-300 font-light text-2xl leading-relaxed italic mb-16 px-6">
+                        "I confessed... and you said you liked me too. The happiest day, revealed through Instagram, confirmed in our hearts."
+                    </p>
+                    <div class="max-w-md mx-auto">
+                        <div class="crystal-frame rotate-1">
+                            <div class="p-8 border border-white/10 rounded-lg text-center bg-slate-900/40">
+                                <i data-lucide="instagram" class="w-8 h-8 text-pink-400/60 mx-auto mb-4"></i>
+                                <p class="text-slate-400 font-cursive text-xl">Confirming Our Hearts ❤️</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter: IEDC Summit -->
+            <section class="py-24 md:py-48 px-6 bg-slate-900/40">
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+                    <div class="reveal">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="crystal-frame -rotate-3 mt-8">
+                                <img src="summit/WhatsApp Image 2026-04-13 at 10.48.55 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Summit">
+                            </div>
+                            <div class="crystal-frame rotate-2">
+                                <img src="summit/WhatsApp Image 2026-04-13 at 10.48.56 AM (1).jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Summit 2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reveal">
+                        <div class="inline-block px-4 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] tracking-widest uppercase mb-6">The Embrace</div>
+                        <h3 class="font-serif text-4xl md:text-5xl mb-8 neon-text-pink">IEDC Summit</h3>
+                        <p class="text-slate-400 font-light leading-relaxed text-xl italic">
+                            The evening was pure magic. Our very first hug—time stopped, the noise faded, and it felt exactly like a scene from a movie. I never wanted to let go.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter: Tea Moments -->
+            <section class="py-24 md:py-48 px-6">
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+                    <div class="reveal md:text-right order-2 md:order-1">
+                        <div class="inline-block px-4 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] tracking-widest uppercase mb-6">Soft Connections</div>
+                        <h3 class="font-serif text-4xl md:text-5xl mb-8 text-white">Tea & Hand-Holds</h3>
+                        <p class="text-slate-400 font-light leading-relaxed text-xl italic">
+                            Daily gatherings at the canteen, shared laughter with the gang. But the highlight was always that quiet, secret connection of our hands meeting under the table.
+                        </p>
+                    </div>
+                    <div class="reveal order-1 md:order-2 grid grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="crystal-frame rotate-6">
+                            <img src="tea moments/WhatsApp Image 2026-04-13 at 10.48.56 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Tea 1">
+                        </div>
+                        <div class="crystal-frame -rotate-3 mt-12">
+                            <img src="tea moments/WhatsApp Image 2026-04-13 at 10.49.01 AM (1).jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Tea 2">
+                        </div>
+                        <div class="crystal-frame rotate-2">
+                            <img src="tea moments/WhatsApp Image 2026-04-13 at 10.49.02 AM (1).jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Tea 3">
+                        </div>
+                        <div class="crystal-frame -rotate-1 mt-8">
+                            <img src="tea moments/WhatsApp Image 2026-04-13 at 10.49.02 AM (2).jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Tea 4">
+                        </div>
+                        <div class="crystal-frame rotate-3">
+                            <img src="tea moments/WhatsApp Image 2026-04-13 at 10.49.02 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Tea 5">
+                        </div>
+                        <div class="crystal-frame -rotate-2 mt-4">
+                            <img src="tea moments/WhatsApp Image 2026-04-13 at 10.49.03 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Tea 6">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NEW: Povval Fort -->
+            <section class="py-24 md:py-48 px-6 bg-emerald-950/10">
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+                    <div class="reveal flex flex-wrap gap-4 justify-center">
+                        <div class="grid grid-cols-2 gap-4 max-w-lg">
+                            <div class="crystal-frame -rotate-2">
+                                <img src="povval walk date/Screenshot_20260219_222014.jpg" class="w-full h-auto object-cover" alt="Povval Fort 1">
+                            </div>
+                            <div class="crystal-frame rotate-3 mt-8">
+                                <img src="povval walk date/WhatsApp Image 2026-04-13 at 10.49.00 AM (1).jpeg" class="w-full h-auto object-cover" alt="Povval Fort 2">
+                            </div>
+                            <div class="crystal-frame -rotate-1 col-span-2">
+                                <img src="povval walk date/WhatsApp Image 2026-04-13 at 10.49.00 AM (2).jpeg" class="w-full h-auto object-cover" alt="Povval Fort 3">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reveal">
+                        <div class="inline-block px-4 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] tracking-widest uppercase mb-6">Transition</div>
+                        <h3 class="font-serif text-4xl md:text-5xl mb-8 neon-text-gold">Povval Fort</h3>
+                        <p class="text-slate-300 font-light leading-relaxed text-xl italic">
+                            Our very first walk as more than just friends. Exploring the walls of Povval Fort, feeling the transition from 'me' to 'we'.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NEW: First Kiss -->
+            <section class="py-24 md:py-48 px-6 bg-rose-950/20">
+                <div class="max-w-4xl mx-auto text-center reveal">
+                    <div class="mb-12">
+                        <i data-lucide="sparkles" class="w-12 h-12 text-pink-300 mx-auto animate-pulse"></i>
+                    </div>
+                    <h3 class="font-cursive text-5xl md:text-7xl text-pink-400 mb-10">The First Kiss.</h3>
+                    <p class="text-slate-300 font-light text-2xl leading-relaxed italic mb-16 px-6">
+                        "A soft moment on your cheeks... the sweetest cherry on top of our new beginning."
+                    </p>
+                    <div class="max-w-2xl mx-auto grid grid-cols-2 gap-8">
+                        <div class="crystal-frame rotate-2">
+                            <img src="first kiss/Screenshot_20260219_222022.jpg" class="w-full h-auto object-cover" alt="The Kiss 1">
+                        </div>
+                        <div class="crystal-frame -rotate-2 mt-12">
+                            <img src="first kiss/WhatsApp Image 2026-04-13 at 10.49.00 AM.jpeg" class="w-full h-auto object-cover" alt="The Kiss 2">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter: Mangalore Hangout -->
+            <section class="py-24 md:py-48 px-6 bg-indigo-950/20">
+                <div class="max-w-7xl mx-auto text-center reveal">
+                    <div class="inline-block px-4 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-[10px] tracking-widest uppercase mb-12">The Escape</div>
+                    <h3 class="font-serif text-5xl md:text-7xl mb-12 neon-text-gold">Mangalore Hangout</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                        <div class="crystal-frame reveal" style="transition-delay: 0.1s">
+                            <img src="manglore hangout/WhatsApp Image 2026-04-13 at 10.48.57 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Hangout 1">
+                        </div>
+                        <div class="crystal-frame reveal" style="transition-delay: 0.2s">
+                            <img src="manglore hangout/Screenshot_20260219_222058.jpg" loading="lazy" class="w-full h-auto object-cover" alt="Hangout 2">
+                        </div>
+                        <div class="crystal-frame reveal" style="transition-delay: 0.3s">
+                            <img src="manglore hangout/WhatsApp Image 2026-04-13 at 10.48.58 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Hangout 3">
+                        </div>
+                        <div class="crystal-frame reveal" style="transition-delay: 0.4s">
+                            <img src="manglore hangout/WhatsApp Image 2026-04-13 at 10.48.57 AM (1).jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Hangout 4">
+                        </div>
+                        <div class="crystal-frame reveal" style="transition-delay: 0.5s">
+                            <img src="manglore hangout/WhatsApp Image 2026-04-13 at 10.48.58 AM (1).jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Hangout 5">
+                        </div>
+                        <div class="crystal-frame reveal" style="transition-delay: 0.6s">
+                            <img src="manglore hangout/WhatsApp Image 2026-04-13 at 10.48.58 AM (2).jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Hangout 6">
+                        </div>
+                        <div class="crystal-frame reveal" style="transition-delay: 0.7s">
+                            <img src="manglore hangout/WhatsApp Image 2026-04-13 at 10.48.59 AM (1).jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Hangout 7">
+                        </div>
+                        <div class="crystal-frame reveal" style="transition-delay: 0.8s">
+                            <img src="manglore hangout/WhatsApp Image 2026-04-13 at 10.48.59 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Hangout 8">
+                        </div>
+                    </div>
+                    <p class="mt-16 text-slate-300 font-light text-xl leading-relaxed italic max-w-3xl mx-auto px-6">
+                        "Trying out dresses, eating together, the rhythmic sounds of the train... just us walking and talking for miles. It was so refreshing and lovely."
+                    </p>
+                </div>
+            </section>
+
+            <!-- Chapter: Palakunnu Bharani -->
+            <section class="py-24 md:py-48 px-6">
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+                    <div class="reveal md:text-right">
+                        <div class="inline-block px-4 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[10px] tracking-widest uppercase mb-6">Festival Nights</div>
+                        <h3 class="font-serif text-4xl md:text-5xl mb-8 neon-text-pink">Palakunnu Bharani</h3>
+                        <p class="text-slate-400 font-light leading-relaxed text-xl italic">
+                            Under the glow of fireworks and the energy of the overnight festival. Laughing, talking, and just being in the moment together until the sun considered rising.
+                        </p>
+                    </div>
+                    <div class="reveal grid grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="crystal-frame rotate-1">
+                            <img src="palakunnu bharani/WhatsApp Image 2026-04-13 at 10.49.05 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Bharani 1">
+                        </div>
+                        <div class="crystal-frame -rotate-2 mt-8">
+                            <img src="palakunnu bharani/WhatsApp Image 2026-04-13 at 10.49.06 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Bharani 2">
+                        </div>
+                        <div class="crystal-frame rotate-3">
+                            <img src="palakunnu bharani/WhatsApp Image 2026-04-13 at 10.49.01 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Bharani 3">
+                        </div>
+                        <div class="crystal-frame -rotate-1 mt-4">
+                            <img src="palakunnu bharani/WhatsApp Image 2026-04-13 at 10.49.05 AM (1).jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Bharani 4">
+                        </div>
+                        <div class="crystal-frame rotate-2 col-span-2 lg:col-span-1">
+                            <img src="palakunnu bharani/WhatsApp Image 2026-04-13 at 10.49.05 AM (2).jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Bharani 5">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter: TinkerHack -->
+            <section class="py-24 md:py-48 px-6 bg-slate-900/30">
+                <div class="max-w-6xl mx-auto text-center reveal">
+                    <div class="inline-block px-4 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[10px] tracking-widest uppercase mb-12">Feb 13-14, 2026</div>
+                    <h3 class="font-serif text-5xl md:text-6xl mb-12 text-white">TinkerHack '26</h3>
+                    <p class="text-slate-400 font-light max-w-3xl mx-auto leading-relaxed text-xl italic mb-16">
+                        Mentor and participant. 18 hours of coding, but my favorite part was our first Valentine's Day spent together in that high-energy room.
+                    </p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div class="crystal-frame"><img src="tinkerhack/Screenshot_20260219_221839.jpg" loading="lazy" class="w-full h-auto object-cover" alt="TinkerHack 1"></div>
+                        <div class="crystal-frame mt-8"><img src="tinkerhack/Screenshot_20260219_221913.jpg" loading="lazy" class="w-full h-auto object-cover" alt="TinkerHack 2"></div>
+                        <div class="crystal-frame"><img src="tinkerhack/Screenshot_20260219_221923.jpg" loading="lazy" class="w-full h-auto object-cover" alt="TinkerHack 3"></div>
+                        <div class="crystal-frame mt-8"><img src="tinkerhack/Screenshot_20260219_221934.jpg" loading="lazy" class="w-full h-auto object-cover" alt="TinkerHack 4"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Final Gallery: Speciality Moments -->
+            <section class="py-32 md:py-64 px-6 relative overflow-hidden">
+                <div class="absolute inset-0 bg-pink-500/5 pointer-events-none"></div>
+                <div class="max-w-6xl mx-auto text-center reveal relative z-10">
+                    <div class="mb-16">
+                        <i data-lucide="sparkle" class="w-16 h-16 text-pink-400 mx-auto animate-spin-slow"></i>
+                    </div>
+                    <h3 class="font-cursive text-5xl md:text-8xl neon-text-pink mb-20">Celestial Moments.</h3>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                        <div class="crystal-frame col-span-2">
+                            <img src="other moments/kiss.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="The Kiss">
+                            <p class="mt-4 font-cursive text-2xl text-pink-300">Pure Magic ✨</p>
+                        </div>
+                        <div class="crystal-frame">
+                            <img src="other moments/hackathon unforgettable moments.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Hackathon">
+                        </div>
+                        <div class="crystal-frame">
+                            <img src="other moments/WhatsApp Image 2026-04-13 at 10.48.52 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Other 1">
+                        </div>
+                        <div class="crystal-frame">
+                            <img src="other moments/WhatsApp Image 2026-04-13 at 10.48.40 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Other 2">
+                        </div>
+                        <div class="crystal-frame">
+                            <img src="other moments/WhatsApp Image 2026-04-13 at 10.48.37 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Other 3">
+                        </div>
+                        <div class="crystal-frame">
+                            <img src="other moments/WhatsApp Image 2026-04-13 at 10.48.35 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Other 4">
+                        </div>
+                        <div class="crystal-frame">
+                            <img src="other moments/WhatsApp Image 2026-04-13 at 10.48.54 AM.jpeg" loading="lazy" class="w-full h-auto object-cover" alt="Other 5">
+                        </div>
+                    </div>
+
+                    <div class="mt-32 max-w-3xl mx-auto glass-card p-12 tap-zone" onclick="burstStars(event)">
+                        <p class="text-pink-400/60 text-[10px] tracking-[0.6em] uppercase mb-8">Pulse of Love</p>
+                        <i data-lucide="heart" class="w-16 h-16 text-pink-500 fill-pink-500 animate-pulse mx-auto mb-8"></i>
+                        <h4 class="font-serif text-3xl md:text-5xl text-white italic">To our infinity and beyond.</h4>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="py-32 text-center px-6 relative">
+            <div class="w-32 h-px bg-gradient-to-r from-transparent via-pink-500 to-transparent mx-auto mb-16"></div>
+            <p class="font-cursive text-4xl text-pink-300 mb-6">Always Yours,</p>
+            <p class="text-[10px] tracking-[0.8em] uppercase text-slate-500">Constellation Log • 2025-2026 • Midnight Edition</p>
+        </footer>
+
+    </main>
+
+    <script>
+        function init() {
+            lucide.createIcons();
+            createStars();
+            setupScrollReveal();
+            setupCursorGlow();
+            createConstellation();
+        }
+
+        // Star Background (Canvas-based for performance)
+        function createStars() {
+            const canvas = document.getElementById('star-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height, stars = [];
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                initStars();
+            }
+
+            function initStars() {
+                stars = [];
+                for (let i = 0; i < 250; i++) {
+                    stars.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        size: Math.random() * 2 + 0.5,
+                        speed: Math.random() * 0.05 + 0.01,
+                        opacity: Math.random() * 0.7 + 0.3,
+                        twinkle: Math.random() * 0.02
+                    });
+                }
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+                stars.forEach(star => {
+                    star.opacity += star.twinkle;
+                    if (star.opacity > 1 || star.opacity < 0.3) star.twinkle *= -1;
+                    
+                    ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+            draw();
+
+            // Shooting star interval
+            setInterval(createShootingStar, 4000);
+        }
+
+        function createShootingStar() {
+            const canvas = document.getElementById('star-canvas');
+            const ctx = canvas.getContext('2d');
+            let x = Math.random() * window.innerWidth;
+            let y = Math.random() * window.innerHeight * 0.5;
+            let length = Math.random() * 100 + 100;
+            let startTime = null;
+
+            function animate(time) {
+                if (!startTime) startTime = time;
+                let progress = (time - startTime) / 800;
+                if (progress > 1) return;
+
+                let curX = x + progress * length;
+                let curY = y + progress * length;
+
+                ctx.strokeStyle = `rgba(255, 255, 255, ${1 - progress})`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(curX - 20, curY - 20);
+                ctx.lineTo(curX, curY);
+                ctx.stroke();
+
+                requestAnimationFrame(animate);
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Constellation for password screen
+        function createConstellation() {
+            const container = document.getElementById('constellation-bg');
+            for(let i=0; i<40; i++) {
+                const node = document.createElement('div');
+                node.className = 'constellation-node';
+                node.style.left = Math.random() * 100 + '%';
+                node.style.top = Math.random() * 100 + '%';
+                container.appendChild(node);
+            }
+        }
+
+        // Interaction Handlers
+        function unfoldStory() {
+            const cover = document.getElementById('cover');
+            const root = document.getElementById('story-root');
+            
+            cover.style.transform = 'scale(1.2) translateY(-100%)';
+            cover.style.opacity = '0';
+            
+            setTimeout(() => {
+                cover.style.display = 'none';
+                root.classList.remove('hidden');
+                setTimeout(() => {
+                    root.classList.add('opacity-100');
+                    root.style.transform = 'translateY(0)';
+                    window.scrollTo(0, 0);
+                    // Single icon creation after unfold for new content
+                    lucide.createIcons();
+                }, 50);
+            }, 1000);
+        }
+
+        function checkPass() {
+            const input = document.getElementById('pass-input').value;
+            const screen = document.getElementById('password-screen');
+            const error = document.getElementById('error-msg');
+            
+            if (input === '1110') {
+                screen.style.opacity = '0';
+                screen.style.transform = 'scale(1.1)';
+                setTimeout(() => screen.style.display = 'none', 1000);
+            } else {
+                error.classList.remove('opacity-0');
+                document.getElementById('pass-input').value = '';
+                setTimeout(() => error.classList.add('opacity-0'), 2000);
+                // Shake effect
+                document.querySelector('#password-screen .glass-card').animate([
+                    { transform: 'translateX(0)' },
+                    { transform: 'translateX(-10px)' },
+                    { transform: 'translateX(10px)' },
+                    { transform: 'translateX(0)' }
+                ], { duration: 300 });
+            }
+        }
+
+        function burstStars(e) {
+            const container = document.body;
+            const x = e.clientX || e.touches?.[0].clientX;
+            const y = e.clientY || e.touches?.[0].clientY;
+            
+            for(let i=0; i<30; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'fixed pointer-events-none text-pink-400 z-[150]';
+                spark.style.left = x + 'px';
+                spark.style.top = y + 'px';
+                spark.innerHTML = `<i data-lucide="sparkle" style="width:${Math.random()*20+10}px"></i>`;
+                container.appendChild(spark);
+                lucide.createIcons();
+                
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 200 + 50;
+                
+                spark.animate([
+                    { transform: 'translate(0,0) rotate(0deg) scale(1)', opacity: 1 },
+                    { transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px) rotate(360deg) scale(0)`, opacity: 0 }
+                ], { duration: 1500, easing: 'ease-out' }).onfinish = () => spark.remove();
+            }
+        }
+
+        // Utils
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        function setupCursorGlow() {
+            const glow = document.getElementById('cursor-glow');
+            document.addEventListener('mousemove', (e) => {
+                glow.style.left = e.clientX + 'px';
+                glow.style.top = e.clientY + 'px';
+            });
+        }
+
+        // Allow Enter key
+        document.getElementById('pass-input')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkPass();
+        });
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

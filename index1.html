@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Log of Us | Our Journey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@300;400;500&family=Playfair+Display:ital,wght@0,600;1,600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --vintage-cream: #faf7f2;
+            --soft-rose: #fce4ec;
+            --deep-rose: #d81b60;
+            --burnt-rose: #b76e79;
+            --accent-gold: #d4af37;
+            --paper-texture: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+        }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--vintage-cream);
+            color: #444;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+        }
+        
+        /* Subtle Paper Grain Effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: var(--paper-texture);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 500;
+        }
+
+        .font-cursive { font-family: 'Dancing Script', cursive; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Enhanced Polaroid Style */
+        .polaroid {
+            background: white;
+            padding: 10px 10px 30px 10px;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: grayscale(5%) sepia(5%);
+            /* Multi-layered shadow for realistic depth */
+            box-shadow: 
+                0 4px 6px -1px rgba(0,0,0,0.05), 
+                0 2px 4px -1px rgba(0,0,0,0.03), 
+                0 15px 25px -5px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        .polaroid:hover {
+            transform: scale(1.05) rotate(0deg) !important;
+            z-index: 50;
+            filter: grayscale(0%) sepia(0%);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+        }
+
+        /* Washi Tape Effect */
+        .washi-tape-top::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            width: 80px;
+            height: 25px;
+            background: rgba(216, 27, 96, 0.15);
+            backdrop-filter: blur(1px);
+            z-index: 1;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            border-left: 2px dashed rgba(255,255,255,0.2);
+            border-right: 2px dashed rgba(255,255,255,0.2);
+        }
+        .washi-tape-corner::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            transform: rotate(45deg);
+            width: 60px;
+            height: 20px;
+            background: rgba(183, 110, 121, 0.2);
+            backdrop-filter: blur(1px);
+            z-index: 1;
+        }
+
+        /* Stitched Timeline */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            border-left: 2px dashed #e5e7eb;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        .floating { animation: floating 4s ease-in-out infinite; }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .tap-zone {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        .tap-zone:active { transform: scale(0.95); }
+
+        .sparkle-slow { animation: sparkle 3s infinite; }
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body class="selection:bg-pink-100 cursor-default bg-[#faf7f2] text-gray-800">
+
+    <!-- Privacy Layer (Password) -->
+    <div id="password-screen" class="fixed inset-0 z-[600] bg-[#faf7f2] flex items-center justify-center p-6">
+        <div class="max-w-xs w-full text-center">
+            <div class="mb-8 floating">
+                <i data-lucide="lock" class="w-12 h-12 text-pink-200 mx-auto"></i>
+            </div>
+            <h2 class="font-serif italic text-2xl text-gray-800 mb-6">A Secret for Us</h2>
+            <p class="text-gray-400 text-[10px] tracking-[0.3em] uppercase mb-8">Enter our special date (DDMM)</p>
+            <input type="password" id="pass-input" class="w-full bg-white border-b-2 border-pink-50 py-3 text-center text-2xl tracking-[1em] focus:outline-none focus:border-pink-200 transition-colors text-pink-300 font-bold" placeholder="••••">
+            <div id="error-msg" class="text-pink-300 text-[10px] mt-4 opacity-0 transition-opacity">Incorrect, try again ❤️</div>
+            <button onclick="checkPass()" class="mt-12 px-10 py-3 bg-white shadow-sm border border-gray-100 text-pink-400 rounded-full text-[10px] tracking-widest uppercase hover:bg-pink-50 transition-colors">Unlock</button>
+        </div>
+    </div>
+
+    <!-- Sparkle Layer -->
+    <div id="canvas-bg" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+    <!-- Cover Section -->
+    <div id="cover" class="fixed inset-0 z-[100] bg-[#faf7f2] flex items-center justify-center transition-opacity duration-1000">
+        <div class="text-center px-8 tap-zone" onclick="unfoldStory()">
+            <div class="mb-8 floating relative">
+                <i data-lucide="heart" class="w-16 h-16 md:w-20 md:h-20 text-pink-200 fill-pink-50 mx-auto"></i>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <i data-lucide="sparkles" class="w-6 h-6 text-pink-400 mt-1"></i>
+                </div>
+            </div>
+            <h1 class="font-serif italic text-3xl md:text-5xl text-gray-800 mb-4">The Log of Us</h1>
+            <p class="text-gray-400 font-light tracking-[0.5em] text-[10px] md:text-xs uppercase">A little surprise for my favorite person</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="story-root" class="hidden opacity-0 transition-opacity duration-1000 relative">
+        
+        <!-- Hero Section -->
+        <section class="min-h-screen flex flex-col items-center justify-center px-6 text-center relative pointer-events-none">
+            <div class="reveal max-w-3xl">
+                <span class="text-pink-400 uppercase tracking-[0.6em] text-[10px] mb-8 block">Since April 2025</span>
+                <h2 class="font-cursive text-4xl md:text-6xl text-pink-500 mb-8">Hi, beautiful.</h2>
+                <p class="text-xl md:text-3xl font-light leading-relaxed text-gray-600 italic font-serif">
+                    "From Innovation Corner to our forever corner.<br>
+                    Countless smiles, quiet laughter, and a journey<br>
+                    that's just getting started."
+                </p>
+                <div class="mt-12 opacity-20">
+                    <i data-lucide="chevron-down" class="w-8 h-8 mx-auto animate-bounce text-gray-400"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Timeline -->
+        <div class="relative">
+            <div class="timeline-line hidden md:block"></div>
+
+            <!-- Chapter 1: The Spark -->
+            <section class="py-20 md:py-32 px-6">
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+                    <div class="reveal md:text-right">
+                        <div class="inline-block px-4 py-1 rounded-full bg-pink-50 text-pink-400 text-[10px] tracking-widest uppercase mb-4">Phase 01</div>
+                        <h3 class="font-serif text-3xl md:text-4xl mb-6">Innovation Corner</h3>
+                        <p class="text-gray-500 font-light leading-relaxed text-lg italic">
+                            Everything started at Teranis 2025 Innovation Corner. That's when I first noticed you—a spark was born in my mind. You were there, and suddenly, the whole room felt different.
+                        </p>
+                    </div>
+                    <div class="reveal">
+                        <div class="polaroid washi-tape-top shadow-xl -rotate-2 max-w-sm mx-auto">
+                            <div class="aspect-square bg-gray-50 overflow-hidden rounded-sm">
+                                <img src="innovation_corner_illustration.png" class="w-full h-full object-cover" alt="The first spark">
+                            </div>
+                            <p class="mt-4 font-cursive text-xl text-center text-gray-400">The First Spark</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 2: FOSS Club -->
+            <section class="py-20 md:py-32 px-6 bg-white/30">
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+                    <div class="reveal order-2 md:order-1 flex flex-wrap justify-center gap-4">
+                        <div class="polaroid washi-tape-corner rotate-3 w-48 md:w-56">
+                            <div class="aspect-[4/5] bg-gray-50 flex items-center justify-center text-gray-300 italic text-sm p-4 text-center border-2 border-dashed border-gray-100">
+                                [ FOSS Activities ]
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reveal order-1 md:order-2">
+                        <div class="inline-block px-4 py-1 rounded-full bg-blue-50 text-blue-400 text-[10px] tracking-widest uppercase mb-4">Phase 02</div>
+                        <h3 class="font-serif text-3xl md:text-4xl mb-6">The FOSS Bond</h3>
+                        <p class="text-gray-500 font-light leading-relaxed text-lg italic">
+                            We were in the same FOSS Club, meeting during those long sessions and volunteer work. That soft corner and spark stayed with me through every meeting.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 3: Bangalore Trip -->
+            <section class="py-24 md:py-40 px-6">
+                <div class="max-w-4xl mx-auto text-center reveal">
+                    <div class="inline-block px-4 py-1 rounded-full bg-emerald-50 text-emerald-500 text-[10px] tracking-widest uppercase mb-8">Phase 03</div>
+                    <h3 class="font-serif text-4xl md:text-5xl mb-10">The Bangalore Journey</h3>
+                    <p class="text-gray-600 font-light text-xl leading-relaxed italic mb-16 px-4">
+                        "That journey changed everything. 10 people, one meetup, and an eye for each other. The night walks, the games... every moment felt dreamy and right."
+                    </p>
+                    <div class="flex justify-center">
+                        <div class="polaroid washi-tape-top rotate-2 w-72">
+                            <img src="bangalore_trip_illustration.png" class="w-full h-full object-cover aspect-square" alt="Trip">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 4: The Return -->
+            <section class="py-20 md:py-32 px-6 bg-gray-900 text-white overflow-hidden relative">
+                <div class="absolute inset-0 opacity-20">
+                    <div id="stars" class="absolute inset-0"></div>
+                </div>
+                <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center relative z-10">
+                    <div class="reveal order-2 md:order-1 flex gap-4 justify-center">
+                        <div class="polaroid washi-tape-top text-gray-800 rotate-1 w-48 md:w-56 mx-auto">
+                            <img src="Screenshot_20260219_221951.jpg" class="aspect-[4/3] object-cover" alt="The Train">
+                        </div>
+                    </div>
+                    <div class="reveal order-1 md:order-2">
+                        <h3 class="font-serif text-3xl md:text-5xl mb-8 text-pink-200">The Dreamy Return</h3>
+                        <p class="text-gray-300 font-light text-xl leading-relaxed italic">
+                            The return train journey... it was purely magical. Something shifted inside us during that ride home. It was the moment I knew this was more than just a crush.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Victory: The Confession -->
+            <section class="py-32 md:py-48 px-6 bg-pink-50/20">
+                <div class="max-w-4xl mx-auto text-center reveal">
+                    <div class="mb-12">
+                        <i data-lucide="heart" class="w-16 h-16 text-pink-400 fill-pink-400 mx-auto floating"></i>
+                    </div>
+                    <p class="text-gray-400 font-inter font-bold tracking-[0.8em] text-[10px] mb-6 reveal">MOMENT BY MOMENT</p>
+                    <h1 class="font-serif text-5xl md:text-8xl mb-8 reveal leading-tight">The Story <br><span class="text-pink-300 italic">of Us.</span></h1>
+                    <p class="text-gray-500 font-light text-sm md:text-lg mb-12 reveal italic">"A journey reflected in memories, laughter, and a soft pink glow."</p>
+                    <p class="text-gray-600 font-light text-2xl leading-relaxed italic mb-16 px-4">
+                        "I confessed... and you said you liked me too. The happiest day, revealed through Instagram, confirmed in our hearts."
+                    </p>
+                    <div class="max-w-md mx-auto">
+                        <div class="polaroid washi-tape-top rotate-1">
+                            <img src="instagram_confession_illustration.png" class="aspect-square object-cover" alt="The confession">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 5: Tea Moments -->
+            <section class="py-24 md:py-40 px-6">
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+                    <div class="reveal text-right">
+                        <div class="inline-block px-4 py-1 rounded-full bg-amber-50 text-amber-500 text-[10px] tracking-widest uppercase mb-4">Phase 05</div>
+                        <h3 class="font-serif text-3xl md:text-4xl mb-6">Tea Moments & The Gang</h3>
+                        <p class="text-gray-500 font-light leading-relaxed text-lg italic">
+                            Canteen gatherings almost every day, sharing tea and stories with the gang. But one of these tea moments became unforgettable—it was the first time we held hands.
+                        </p>
+                    </div>
+                    <div class="reveal grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="polaroid washi-tape-corner rotate-3">
+                            <img src="Screenshot_20260219_221957.jpg" class="aspect-square object-cover" alt="Holding hands">
+                            <p class="mt-4 font-cursive text-sm text-pink-400">First Hand-Hold ❤️</p>
+                        </div>
+                        <div class="polaroid -rotate-2 mt-8 md:mt-0">
+                            <img src="Screenshot_20260219_222000.jpg" class="aspect-square object-cover" alt="Tea Moment">
+                            <p class="mt-4 font-cursive text-sm text-amber-400">Tea Time ☕</p>
+                        </div>
+                        <div class="polaroid rotate-1 mt-0 md:mt-8">
+                            <img src="Screenshot_20260219_222115.jpg" class="aspect-square object-cover" alt="Daily Life">
+                            <p class="mt-4 font-cursive text-sm text-blue-300">Daily Routine ✨</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 6: Povval Fort -->
+            <section class="py-24 md:py-40 px-6 bg-emerald-50/10">
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+                    <div class="reveal order-2 md:order-1">
+                        <div class="polaroid washi-tape-top -rotate-2 max-w-sm mx-auto">
+                            <div class="aspect-[4/5] bg-gray-50 overflow-hidden">
+                                <img src="Screenshot_20260219_222014.jpg" class="w-full h-full object-cover" alt="Povval Fort">
+                            </div>
+                            <p class="mt-4 font-cursive text-xl text-center text-gray-400">Povval Fort Walk</p>
+                        </div>
+                    </div>
+                    <div class="reveal order-1 md:order-2">
+                        <div class="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-600 text-[10px] tracking-widest uppercase mb-4">First Walk Together</div>
+                        <h3 class="font-serif text-3xl md:text-4xl mb-6">Povval Fort</h3>
+                        <p class="text-gray-500 font-light leading-relaxed text-lg italic">
+                            Our very first walk as more than just friends. Exploring the walls of Povval Fort, feeling the transition from 'me' to 'we'.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 7: The First Kiss -->
+            <section class="py-32 md:py-48 px-6 relative overflow-hidden">
+                <div class="absolute inset-0 bg-pink-100/10 pointer-events-none"></div>
+                <div class="max-w-4xl mx-auto text-center reveal relative z-10">
+                    <div class="mb-12">
+                        <i data-lucide="sparkles" class="w-12 h-12 text-pink-300 mx-auto floating"></i>
+                    </div>
+                    <h3 class="font-cursive text-4xl md:text-6xl text-pink-400 mb-10">The First Kiss.</h3>
+                    <p class="text-gray-600 font-light text-xl leading-relaxed italic mb-16 px-4">
+                        "A soft moment on your cheeks... the sweetest cherry on top of our new beginning."
+                    </p>
+                    <div class="max-w-md mx-auto">
+                        <div class="polaroid washi-tape-top rotate-2">
+                            <img src="Screenshot_20260219_222022.jpg" class="aspect-[4/5] object-cover" alt="The Kiss">
+                            <p class="mt-4 font-cursive text-2xl text-pink-300">Unforgettable ✨</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 8: TinkerHack -->
+            <section class="py-24 md:py-40 px-6">
+                <div class="max-w-6xl mx-auto text-center reveal">
+                    <div class="inline-block px-4 py-1 rounded-full bg-pink-100 text-pink-500 text-[10px] tracking-widest uppercase mb-8">Feb 13-14, 2026</div>
+                    <h3 class="font-serif text-4xl md:text-5xl mb-12 text-gray-800 text-pink-600/70 italic">TinkerHack '26</h3>
+                    <p class="text-gray-500 font-light max-w-3xl mx-auto leading-relaxed text-lg italic mb-16">
+                        An 18-hour hackathon where I was the mentor and you were the participant. Our first Valentine's Day together.
+                    </p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 px-4">
+                        <div class="polaroid -rotate-3">
+                            <img src="Screenshot_20260219_221839.jpg" class="aspect-square object-cover" alt="TinkerHack">
+                        </div>
+                        <div class="polaroid washi-tape-corner rotate-2">
+                            <img src="Screenshot_20260219_221913.jpg" class="aspect-square object-cover" alt="TinkerHack">
+                        </div>
+                        <div class="polaroid -rotate-6">
+                            <img src="Screenshot_20260219_221923.jpg" class="aspect-square object-cover" alt="TinkerHack">
+                        </div>
+                        <div class="polaroid rotate-1">
+                            <img src="Screenshot_20260219_221934.jpg" class="aspect-square object-cover" alt="TinkerHack">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 9: College Day -->
+            <section class="py-24 md:py-40 px-6 bg-white/20">
+                <div class="max-w-4xl mx-auto text-center reveal">
+                    <div class="inline-block px-4 py-1 rounded-full bg-orange-50 text-orange-400 text-[10px] tracking-widest uppercase mb-8">April 1st, 2026</div>
+                    <h3 class="font-serif text-4xl md:text-5xl mb-10">College Day</h3>
+                    <p class="text-gray-600 font-light text-xl leading-relaxed italic mb-12 px-4">
+                        A more recent memory, but just as precious. 
+                    </p>
+                    <div class="flex justify-center">
+                        <div class="polaroid washi-tape-top -rotate-3 w-72">
+                            <div class="aspect-[1/1] bg-gray-50 flex items-center justify-center text-gray-300 italic text-sm p-8 text-center border-2 border-dashed border-gray-100">
+                                [ College Day Photos Coming Soon ]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Current Status -->
+            <section class="py-32 px-6">
+                <div class="max-w-4xl mx-auto text-center">
+                    <div class="reveal mb-20">
+                        <h3 class="font-serif text-4xl mb-10">To Our Future Together</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                            <div class="polaroid washi-tape-corner -rotate-3 overflow-hidden text-gray-800">
+                                <img src="Screenshot_20260219_222058.jpg" class="aspect-square object-cover" alt="Us">
+                            </div>
+                            <div class="polaroid rotate-2 overflow-hidden text-gray-800">
+                                <img src="Screenshot_20260219_222121.jpg" class="aspect-square object-cover" alt="Us">
+                            </div>
+                            <div class="polaroid washi-tape-top rotate-6 overflow-hidden text-gray-800">
+                                <img src="Screenshot_20260219_222125.jpg" class="aspect-square object-cover" alt="Us">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Zone -->
+                    <div class="reveal bg-white p-12 md:p-20 rounded-[3rem] border border-pink-100 shadow-xl relative overflow-hidden tap-zone washi-tape-top" onclick="burstHearts(event)">
+                        <div class="absolute inset-0 opacity-5 pointer-events-none">
+                            <i data-lucide="sparkles" class="w-full h-full text-pink-300 sparkle-slow"></i>
+                        </div>
+                        <p class="text-gray-400 text-[10px] tracking-[0.5em] uppercase mb-8">Tap to send all my love</p>
+                        <div class="relative inline-block scale-150">
+                            <i data-lucide="heart" class="w-12 h-12 text-pink-100 fill-pink-50 mx-auto"></i>
+                            <i data-lucide="sparkles" class="w-6 h-6 text-pink-200 absolute -top-2 -right-2"></i>
+                        </div>
+                        <h4 class="mt-12 font-serif text-3xl text-gray-800">Together Forever.</h4>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="py-24 text-center px-6">
+            <div class="w-16 h-px bg-pink-100 mx-auto mb-10"></div>
+            <p class="font-cursive text-3xl text-pink-400 mb-4">Yours, Always.</p>
+            <p class="text-[9px] tracking-[0.6em] uppercase text-gray-400">Our Log • 2025-2026 • Let's Make More Memories</p>
+        </footer>
+
+    </main>
+
+    <script>
+        function init() {
+            lucide.createIcons();
+            setupScrollReveal();
+            createStars();
+        }
+
+        function unfoldStory() {
+            const cover = document.getElementById('cover');
+            const root = document.getElementById('story-root');
+            
+            cover.classList.add('opacity-0');
+            setTimeout(() => {
+                cover.style.display = 'none';
+                root.classList.remove('hidden');
+                setTimeout(() => {
+                    root.classList.add('opacity-100');
+                    window.scrollTo(0,0);
+                }, 50);
+            }, 1000);
+        }
+
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        function burstHearts(e) {
+            const container = document.body;
+            const x = e.clientX || (e.touches && e.touches[0].clientX);
+            const y = e.clientY || (e.touches && e.touches[0].clientY);
+            
+            for(let i=0; i<15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-trail text-pink-400';
+                heart.style.left = (x + (Math.random() - 0.5) * 100) + 'px';
+                heart.style.top = (y + (Math.random() - 0.5) * 100) + 'px';
+                
+                heart.innerHTML = `<i data-lucide="heart" style="width:${Math.random()*16+8}px; fill:currentColor"></i>`;
+                container.appendChild(heart);
+                lucide.createIcons();
+                
+                setTimeout(() => heart.remove(), 4000);
+            }
+        }
+
+        function createStars() {
+            const container = document.getElementById('stars');
+            if(!container) return;
+            for(let i=0; i<100; i++) {
+                const star = document.createElement('div');
+                star.className = 'absolute bg-white rounded-full';
+                const size = Math.random() * 2;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.opacity = Math.random();
+                container.appendChild(star);
+            }
+        }
+
+        // Mouse trail sparkle
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.96) {
+                const spark = document.createElement('div');
+                spark.className = 'fixed pointer-events-none text-pink-200/40 z-0';
+                spark.style.left = e.clientX + 'px';
+                spark.style.top = e.clientY + 'px';
+                spark.innerHTML = `<i data-lucide="plus" style="width:6px"></i>`;
+                document.getElementById('canvas-bg').appendChild(spark);
+                lucide.createIcons();
+                
+                spark.animate([
+                    { transform: 'translate(0,0) scale(1)', opacity: 0.5 },
+                    { transform: `translate(${(Math.random()-0.5)*50}px, 50px) scale(0)`, opacity: 0 }
+                ], { duration: 2000, easing: 'ease-out' }).onfinish = () => spark.remove();
+            }
+        });
+
+        function checkPass() {
+            const input = document.getElementById('pass-input').value;
+            const screen = document.getElementById('password-screen');
+            const error = document.getElementById('error-msg');
+            
+            // Oct 11 default
+            if (input === '1110' || input === '11/10') {
+                screen.classList.add('opacity-0');
+                setTimeout(() => screen.style.display = 'none', 1000);
+            } else {
+                error.classList.remove('opacity-0');
+                document.getElementById('pass-input').value = '';
+                setTimeout(() => error.classList.add('opacity-0'), 2000);
+            }
+        }
+
+        document.getElementById('pass-input')?.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkPass();
+            }
+        });
+
+        window.onload = init;
+    </script>
+</body>
+</html>
